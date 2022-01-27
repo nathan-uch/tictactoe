@@ -23,6 +23,7 @@ const CreatePlayer = (name, mark, count) => {
     };
 
     return {
+        name,
         getCount: function() { return count },
         addMarkToArray,
     };
@@ -67,10 +68,57 @@ const GameControl = (function() {
 
     const checkForWinner = () => {
         if (player1.getCount() >= 3 || player2.getCount() >= 3) {
-            console.log("Winner");
+            if (GameBoard.array[0] == "X" && GameBoard.array[1] == "X" && GameBoard.array[2] == "X") {
+                p1Win();
+            } else if (GameBoard.array[0], GameBoard.array[3] == "X" && GameBoard.array[6] == "X") {
+                p1Win();
+            } else if (GameBoard.array[0] == "X" && GameBoard.array[4] == "X" && GameBoard.array[8] == "X") {
+                p1Win();
+            } else if (GameBoard.array[2] == "X" && GameBoard.array[5] == "X" && GameBoard.array[8] == "X") {
+                p1Win();
+            } else if (GameBoard.array[6] == "X" && GameBoard.array[7] == "X" && GameBoard.array[8] == "X") {
+                p1Win();
+            } else if (GameBoard.array[3] == "X" && GameBoard.array[4] == "X" && GameBoard.array[5] == "X") {
+                p1Win();
+            } else if (GameBoard.array[2] == "X" && GameBoard.array[4] == "X" && GameBoard.array[6] == "X") {
+                p1Win();
+            } else if (GameBoard.array[1] == "X" && GameBoard.array[4] == "X" && GameBoard.array[7] == "X") {
+                p1Win();
+            } else if (GameBoard.array[0] == "O" && GameBoard.array[1] == "O" && GameBoard.array[2] == "O") {
+                p2Win();
+            } else if (GameBoard.array[0] == "O" && GameBoard.array[3] == "O" && GameBoard.array[6] == "O") {
+                p2Win();
+            } else if (GameBoard.array[0] == "O" && GameBoard.array[4] == "O" && GameBoard.array[8] == "O") {
+                p2Win();
+            } else if (GameBoard.array[2] == "O" && GameBoard.array[5] == "O" && GameBoard.array[8] == "O") {
+                p2Win();
+            } else if (GameBoard.array[6] == "O" && GameBoard.array[7] == "O" && GameBoard.array[8] == "O") {
+                p2Win();
+            } else if (GameBoard.array[3] == "O" && GameBoard.array[4] == "O" && GameBoard.array[5] == "O") {
+                p2Win();
+            } else if (GameBoard.array[2] == "O" && GameBoard.array[4] == "O" && GameBoard.array[6] == "O") {
+                p2Win();
+            } else if (GameBoard.array[1] == "O" && GameBoard.array[4] == "O" && GameBoard.array[7] == "O") {
+                p2Win();
+            } else if (player1.getCount() == 5) {
+                announceTie();
+            };
         };
     };
     
+    
+    const p1Win = () => {
+        alert("Congratulations, " + player1.name + " won!");
+    };
+
+    const p2Win = () => {
+        alert("Congratulations, " + player2.name + " won!");
+    }
+
+    const announceTie = () => {
+        alert("It's a tie! Close game!");
+    }
+
     //Event Listener for clicking on the board
     let cell = document.querySelectorAll(".cell");
     cell.forEach((button) => {
@@ -78,12 +126,10 @@ const GameControl = (function() {
             let btnIndex = button.id;
             checkTurn(btnIndex);
             GameBoard.renderContents();
-            console.log(player1.getCount());
-            console.log(player2.getCount());
             checkForWinner();
         });
     });
 })();
 
-const player1 = CreatePlayer("bob", "X", 0);
-const player2 = CreatePlayer("mary", "O", 0);
+const player1 = CreatePlayer("nina", "X", 0);
+const player2 = CreatePlayer("nathan", "O", 0);
