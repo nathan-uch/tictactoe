@@ -1,40 +1,53 @@
 //Player Factory 
-//this factory will objects for each player with mark of X or O
+//this factory will objects for each player with mark of X or O and will add marks to the array
 //this will also be used for the computer player
-const CreatePlayer = (name, mark) => {
+const CreatePlayer = (name, mark, count) => {
     this.name = name;
     this.mark = mark;
-    
+    this.count = count;
+
+    const addMarkToArray = (btnIndex) => {
+        if ( GameBoard.array[btnIndex] == "" ) {
+            GameBoard.array[btnIndex] = mark;
+            updateCount();
+        };
+    };
+
+    const updateCount = () => {
+        count = 0;
+        for ( let a = 0; a < GameBoard.array.length; a++ ) {
+            if ( GameBoard.array[a] == mark ) {
+                count++;
+            };
+        };
+    };
+
     return {
-        name,
-        mark
+        getCount: function() { return count },
+        addMarkToArray,
     };
 };
 
 //Game Board Module 
 //this module create the board array and render the board
 const GameBoard = (function() {
-    'use strict';
+    "use strict";
 
-    let array = ["X", "", "", "O", "", "", "", "", ""];
-
-    function arrayBoard() {
-        return array;
-    }
+    let array = ["", "", "", "", "", "", "", "", ""];
 
     const renderContents = () => {
         let cell = document.querySelectorAll(".cell");
-        for (let c = 0; c < cell.length; c++) { 
-            for (let i = 0; i < arrayBoard.length; i++) { 
-                if (cell[c].id == i) { 
-                    cell[c].textContent = arrayBoard[i];
+        for ( let c = 0; c < cell.length; c++ ) { 
+            for ( let i = 0; i < array.length; i++ ) { 
+                if ( cell[c].id == i ) { 
+                    cell[c].textContent = array[i];
                 };
             };
         };
     };
 
     return { 
-        arrayBoard: arrayBoard,
+        array,
         renderContents
     };
 })();
@@ -42,54 +55,35 @@ const GameBoard = (function() {
 //Game Controller Module
 //this module will check different variables each turn
 const GameControl = (function() {
-    'use strict';
+    "use strict";
 
+    const checkTurn = (btnIndex) => {
+        if ( player1.getCount() == 0 || player1.getCount() == player2.getCount() ) {
+            player1.addMarkToArray(btnIndex);
+        } else if ( player1.getCount() > player2.getCount() ) {
+            player2.addMarkToArray(btnIndex);
+        };
+    };
+
+    const checkForWinner = () => {
+        if (player1.getCount() >= 3 || player2.getCount() >= 3) {
+            console.log("Winner");
+        };
+    };
+    
     //Event Listener for clicking on the board
     let cell = document.querySelectorAll(".cell");
-    let index;
-    let xCount;
-    let oCount;
-
-    const checkTurn = () => {
-        for (let c = 0; c > GameBoard.arrayBoard.length; c++) {
-            if (GameBoard.arrayBoardray[c] == "X") {
-                xCount++;
-            } else if (GameBoard.arrayBoardray[c] == "O") {
-                oCount++;
-            };
-        };
-    };
-
-    const checkExistingMarks = () => {
-    };
-
-    const addMarkToArray = (index, xCount, oCount) => {
-        if (xCount == 0 || xCount == oCount ) {
-            GameBoard.arrayBoard[index] = 'X';
-        } else if (oCount < xCount) {
-            GameBoard.arrayBoard[index] = 'O';
-        };
-    };
-
-    const checkWinner = () => {
-    };
-
     cell.forEach((button) => {
-        button.addEventListener('click', () => {
-            index = button.id;
-            checkTurn;
-            //checkExistingMarks;
-            addMarkToArray(index);
+        button.addEventListener("click", () => {
+            let btnIndex = button.id;
+            checkTurn(btnIndex);
             GameBoard.renderContents();
-            //this.checkWinner;
+            console.log(player1.getCount());
+            console.log(player2.getCount());
+            checkForWinner();
         });
     });
-
-    return {
-    }
-
 })();
 
-
-const player1 = CreatePlayer('bob', 'X');
-const player2 = CreatePlayer('mary', 'O');
+const player1 = CreatePlayer("bob", "X", 0);
+const player2 = CreatePlayer("mary", "O", 0);
