@@ -1,40 +1,40 @@
 //Player Factory 
-//this factory will objects for each player with mark of X or O and will add marks to the array
-//this will also be used for the computer player
 const CreatePlayer = (name, mark, count) => {
     this.name = name;
     this.mark = mark;
     this.count = count;
 
-    const addMarkToArray = (btnIndex) => {
-        if ( GameBoard.array[btnIndex] == "" ) {
-            GameBoard.array[btnIndex] = mark;
-            updateCount();
-        };
-    };
-
-    const updateCount = () => {
+    const updateTurnCount = () => {
         count = 0;
-        for ( let a = 0; a < GameBoard.array.length; a++ ) {
-            if ( GameBoard.array[a] == mark ) {
+        for ( let a = 0; a < GameBoard.getArray().length; a++ ) {
+            if ( GameBoard.getArray()[a] == mark ) {
                 count++;
             };
         };
     };
 
     return {
-        name,
+        getName: function() { return name },
+        getMark: function() { return mark },
         getCount: function() { return count },
-        addMarkToArray,
+        updateTurnCount
     };
 };
 
+
+
 //Game Board Module 
-//this module create the board array and render the board
 const GameBoard = (function() {
     "use strict";
 
     let array = ["", "", "", "", "", "", "", "", ""];
+
+    const addMarkToArray = (btnIndex, player) => {
+        if (array[btnIndex] == "") {
+            array[btnIndex] = player.getMark();
+            player.updateTurnCount();
+        };
+    };
 
     const renderContents = () => {
         let cell = document.querySelectorAll(".cell");
@@ -47,72 +47,90 @@ const GameBoard = (function() {
         };
     };
 
+    const check3InArray = (index1, index2, index3) => {
+        if (index1 !== undefined && index2 !== undefined && index3 !== undefined) { //checks if parameters exist
+            if (array[index1] != '' && array[index2] != '' && array[index3] != '') { //checks if array at indexes is marked
+                if (array[index1] == "X" && array[index2] == "X" && array[index3] == "X") { //checks contents of array at each index
+                    return 'xWins'; 
+                } else if (array[index1] == "O" && array[index2] == "O" && array[index3] == "O") {
+                    return 'oWins';
+                }
+            };
+        };
+    };
+
+    const getArray = () => {
+        return array;
+    };
+
+    //check for winning 3-in-a-row marks at each index
+    const checkForWinner = () => {
+        if (player1.getCount() >= 3) {
+            if (check3InArray(0, 1, 2) == 'xWins') {
+                GameControl.p1Win();
+            } else if (check3InArray(0, 3, 6) == 'xWins') {
+                GameControl.p1Win();
+            } else if (check3InArray(0, 4, 8) == 'xWins') {
+                GameControl.p1Win();
+            } else if (check3InArray(2, 5, 8) == 'xWins') {
+                GameControl.p1Win();
+            } else if (check3InArray(6, 7, 8) == 'xWins') {
+                GameControl.p1Win();
+            } else if (check3InArray(3, 4, 5) == 'xWins') {
+                GameControl.p1Win();
+            } else if (check3InArray(2, 4, 6) == 'xWins') {
+                GameControl.p1Win();
+            } else if (check3InArray(1, 4, 7) == 'xWins') {
+                GameControl.p1Win();
+            } else if (check3InArray(0, 1, 2) == 'oWins') {
+                GameControl.p2Win();
+            } else if (check3InArray(0, 3, 6) == 'oWins') {
+                GameControl.p2Win();
+            } else if (check3InArray(0, 4, 8) == 'oWins') {
+                GameControl.p2Win();
+            } else if (check3InArray(2, 5, 8) == 'oWins') {
+                GameControl.p2Win();
+            } else if (check3InArray(6, 7, 8) == 'oWins') {
+                GameControl.p2Win();
+            } else if (check3InArray(3, 4, 5) == 'oWins') {
+                GameControl.p2Win();
+            } else if (check3InArray(2, 4, 6) == 'oWins') {
+                GameControl.p2Win();
+            } else if (check3InArray(1, 4, 7) == 'oWins') {
+                GameControl.p2Win();
+            } else if (player1.getCount() == 5) {
+                GameControl.announceTie();
+            };
+        };
+    };
+
     return { 
-        array,
-        renderContents
+        getArray,
+        check3InArray,
+        checkForWinner,
+        renderContents,
+        addMarkToArray
     };
 })();
 
 //Game Controller Module
-//this module will check different variables each turn
 const GameControl = (function() {
     "use strict";
 
     const checkTurn = (btnIndex) => {
         if ( player1.getCount() == 0 || player1.getCount() == player2.getCount() ) {
-            player1.addMarkToArray(btnIndex);
+            GameBoard.addMarkToArray(btnIndex, player1);
         } else if ( player1.getCount() > player2.getCount() ) {
-            player2.addMarkToArray(btnIndex);
+            GameBoard.addMarkToArray(btnIndex, player2);
         };
     };
 
-    const checkForWinner = () => {
-        if (player1.getCount() >= 3 || player2.getCount() >= 3) {
-            if (GameBoard.array[0] == "X" && GameBoard.array[1] == "X" && GameBoard.array[2] == "X") {
-                p1Win();
-            } else if (GameBoard.array[0], GameBoard.array[3] == "X" && GameBoard.array[6] == "X") {
-                p1Win();
-            } else if (GameBoard.array[0] == "X" && GameBoard.array[4] == "X" && GameBoard.array[8] == "X") {
-                p1Win();
-            } else if (GameBoard.array[2] == "X" && GameBoard.array[5] == "X" && GameBoard.array[8] == "X") {
-                p1Win();
-            } else if (GameBoard.array[6] == "X" && GameBoard.array[7] == "X" && GameBoard.array[8] == "X") {
-                p1Win();
-            } else if (GameBoard.array[3] == "X" && GameBoard.array[4] == "X" && GameBoard.array[5] == "X") {
-                p1Win();
-            } else if (GameBoard.array[2] == "X" && GameBoard.array[4] == "X" && GameBoard.array[6] == "X") {
-                p1Win();
-            } else if (GameBoard.array[1] == "X" && GameBoard.array[4] == "X" && GameBoard.array[7] == "X") {
-                p1Win();
-            } else if (GameBoard.array[0] == "O" && GameBoard.array[1] == "O" && GameBoard.array[2] == "O") {
-                p2Win();
-            } else if (GameBoard.array[0] == "O" && GameBoard.array[3] == "O" && GameBoard.array[6] == "O") {
-                p2Win();
-            } else if (GameBoard.array[0] == "O" && GameBoard.array[4] == "O" && GameBoard.array[8] == "O") {
-                p2Win();
-            } else if (GameBoard.array[2] == "O" && GameBoard.array[5] == "O" && GameBoard.array[8] == "O") {
-                p2Win();
-            } else if (GameBoard.array[6] == "O" && GameBoard.array[7] == "O" && GameBoard.array[8] == "O") {
-                p2Win();
-            } else if (GameBoard.array[3] == "O" && GameBoard.array[4] == "O" && GameBoard.array[5] == "O") {
-                p2Win();
-            } else if (GameBoard.array[2] == "O" && GameBoard.array[4] == "O" && GameBoard.array[6] == "O") {
-                p2Win();
-            } else if (GameBoard.array[1] == "O" && GameBoard.array[4] == "O" && GameBoard.array[7] == "O") {
-                p2Win();
-            } else if (player1.getCount() == 5) {
-                announceTie();
-            };
-        };
-    };
-    
-    
     const p1Win = () => {
-        alert("Congratulations, " + player1.name + " won!");
+        alert("Congratulations, " + player1.getName() + " won!");
     };
 
     const p2Win = () => {
-        alert("Congratulations, " + player2.name + " won!");
+        alert("Congratulations, " + player2.getName() + " won!");
     }
 
     const announceTie = () => {
@@ -126,10 +144,16 @@ const GameControl = (function() {
             let btnIndex = button.id;
             checkTurn(btnIndex);
             GameBoard.renderContents();
-            checkForWinner();
+            GameBoard.checkForWinner();
         });
     });
+
+    return {
+        p1Win,
+        p2Win,
+        announceTie,
+    }
 })();
 
-const player1 = CreatePlayer("nina", "X", 0);
-const player2 = CreatePlayer("nathan", "O", 0);
+const player1 = CreatePlayer("peter", "X", 0);
+const player2 = CreatePlayer("esther", "O", 0);
