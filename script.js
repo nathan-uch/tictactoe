@@ -21,13 +21,17 @@ const CreatePlayer = (name, mark, count) => {
     };
 };
 
-
+const player1 = CreatePlayer("Peter", "X", 0);
+const player2 = CreatePlayer("Esther", "O", 0);
 
 //Game Board Module 
 const GameBoard = (function() {
     "use strict";
 
     let array = ["", "", "", "", "", "", "", "", ""];
+    let cell = document.querySelectorAll(".cell");
+    let player1Turn = document.querySelector('.player1Turn');
+    let player2Turn = document.querySelector('.player2Turn');
 
     const addMarkToArray = (btnIndex, player) => {
         if (array[btnIndex] == "") {
@@ -37,7 +41,6 @@ const GameBoard = (function() {
     };
 
     const renderContents = () => {
-        let cell = document.querySelectorAll(".cell");
         for ( let c = 0; c < cell.length; c++ ) { 
             for ( let i = 0; i < array.length; i++ ) { 
                 if ( cell[c].id == i ) { 
@@ -104,18 +107,53 @@ const GameBoard = (function() {
         };
     };
 
+    const displayTurn = () => {
+        if (player1.getCount() == 0 || player1.getCount() == player2.getCount()) {
+            player1Turn.textContent = "It is " + player1.getName() + "'s turn.";
+            player2Turn.textContent = "It is NOT " + player2.getName() + "'s turn.";
+        } else if (player2.getCount() < player1.getCount()) {
+            player2Turn.textContent = "It is " + player2.getName() + "'s turn.";
+            player1Turn.textContent = "It is NOT " + player1.getName() + "'s turn.";
+        };
+    };
+
+    const resetGame = () => {
+        array = ["", "", "", "", "", "", "", "", ""];
+        renderContents();
+    };
+
+    let resetBtn = document.querySelector('.resetBtn')
+        resetBtn.addEventListener("click", () => {
+            resetGame();
+            GameControl.displayPlayerNames();
+        });
+
     return { 
         getArray,
         check3InArray,
         checkForWinner,
         renderContents,
-        addMarkToArray
+        addMarkToArray,
+        displayTurn
     };
+
 })();
 
 //Game Controller Module
 const GameControl = (function() {
     "use strict";
+
+    let player1Name = document.querySelector(".player1Name");
+    let player2Name = document.querySelector(".player2Name");
+    let player1Turn = document.querySelector('.player1Turn');
+    let player2Turn = document.querySelector('.player2Turn');
+
+    const displayPlayerNames = () => {
+        player1Name.textContent = "Player 1: " + player1.getName();
+        player2Name.textContent = "Player 2: " + player2.getName();
+        player1Turn.textContent = "It is " + player1.getName() + "'s turn.";
+        player2Turn.textContent = "It is NOT " + player2.getName() + "'s turn.";
+    }
 
     const checkTurn = (btnIndex) => {
         if ( player1.getCount() == 0 || player1.getCount() == player2.getCount() ) {
@@ -126,16 +164,21 @@ const GameControl = (function() {
     };
 
     const p1Win = () => {
-        alert("Congratulations, " + player1.getName() + " won!");
+        player1Turn.textContent = "Congratulations " + player1.getName() + "! You won!";
+        player2Turn.textContent = "You lost. Good try.";
+
     };
 
     const p2Win = () => {
-        alert("Congratulations, " + player2.getName() + " won!");
+        player1Turn.textContent = "You lost. Good try.";
+        player2Turn.textContent = "Congratulations " + player2.getName() + "! You won!";
     }
 
     const announceTie = () => {
-        alert("It's a tie! Close game!");
+        player1Turn.textContent = "It's a tie! So close!";
+        player2Turn.textContent = "It's a tie! So close!";
     }
+
 
     //Event Listener for clicking on the board
     let cell = document.querySelectorAll(".cell");
@@ -143,17 +186,18 @@ const GameControl = (function() {
         button.addEventListener("click", () => {
             let btnIndex = button.id;
             checkTurn(btnIndex);
+            GameBoard.displayTurn();
             GameBoard.renderContents();
             GameBoard.checkForWinner();
         });
     });
 
     return {
+        displayPlayerNames,
         p1Win,
         p2Win,
         announceTie,
     }
 })();
 
-const player1 = CreatePlayer("peter", "X", 0);
-const player2 = CreatePlayer("esther", "O", 0);
+GameControl.displayPlayerNames();
