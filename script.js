@@ -21,8 +21,8 @@ const CreatePlayer = (name, mark, count) => {
     };
 };
 
-const player1 = CreatePlayer("Peter", "X", 0);
-const player2 = CreatePlayer("Esther", "O", 0);
+let player1 = CreatePlayer("Peter", "X", 0);
+let player2 = CreatePlayer("Esther", "O", 0);
 
 //Game Board Module 
 const GameBoard = (function() {
@@ -32,6 +32,10 @@ const GameBoard = (function() {
     let cell = document.querySelectorAll(".cell");
     let player1Turn = document.querySelector('.player1Turn');
     let player2Turn = document.querySelector('.player2Turn');
+
+    const getArray = () => {
+        return array;
+    };
 
     const addMarkToArray = (btnIndex, player) => {
         if (array[btnIndex] == "") {
@@ -45,6 +49,11 @@ const GameBoard = (function() {
             for ( let i = 0; i < array.length; i++ ) { 
                 if ( cell[c].id == i ) { 
                     cell[c].textContent = array[i];
+                    if (cell[c].textContent == "X") {
+                        cell[c].style.color = "#BDD7EE";
+                    } else if (cell[c].textContent == "O"){
+                        cell[c].style.color = "#C5E0B4";
+                    }
                 };
             };
         };
@@ -60,10 +69,6 @@ const GameBoard = (function() {
                 }
             };
         };
-    };
-
-    const getArray = () => {
-        return array;
     };
 
     //check for winning 3-in-a-row marks at each index
@@ -110,23 +115,25 @@ const GameBoard = (function() {
     const displayTurn = () => {
         if (player1.getCount() == 0 || player1.getCount() == player2.getCount()) {
             player1Turn.textContent = "It is " + player1.getName() + "'s turn.";
-            player2Turn.textContent = "It is NOT " + player2.getName() + "'s turn.";
+            player2Turn.textContent = "Please wait for " + player1.getName() + "'s turn.";
         } else if (player2.getCount() < player1.getCount()) {
             player2Turn.textContent = "It is " + player2.getName() + "'s turn.";
-            player1Turn.textContent = "It is NOT " + player1.getName() + "'s turn.";
+            player1Turn.textContent = "Please wait for " + player2.getName() + "'s turn.";
         };
     };
 
     const resetGame = () => {
         array = ["", "", "", "", "", "", "", "", ""];
+        player1 = CreatePlayer("Paul", "X", 0)
+        player2 = CreatePlayer("Tina", "O", 0)
         renderContents();
     };
 
-    let resetBtn = document.querySelector('.resetBtn')
-        resetBtn.addEventListener("click", () => {
-            resetGame();
-            GameControl.displayPlayerNames();
-        });
+    let resetBtn = document.querySelector('#resetBtn')
+    resetBtn.addEventListener("click", () => {
+        resetGame();
+        GameControl.displayPlayerNames();
+    });
 
     return { 
         getArray,

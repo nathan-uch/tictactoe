@@ -1,20 +1,37 @@
-h1 {
-    text-align: center;
-    padding: 30px 0 30px 0;
+body {
+    font-family: 'Fredoka One', cursive;
 }
 
+/* Title */
+h1 {
+    -webkit-text-stroke: 1px black;
+    font-size: 6rem;
+    text-align: center;
+    margin: 25px 0;
+}
+
+.tic, .toe {
+    color: #BDD7EE;
+}
+
+.tac {
+    color: #C5E0B4
+}
+
+/* Content Body */
 .bodyContainer {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: center;
     align-items: center;
     flex-wrap: wrap;
+    gap: 50px;
+    padding-top: 40px;
 }
 
-
-/* Players' Info */
+/* Player Info and Buttons*/
 .playersContainer {
     display: flex;
-    width: 25%;
+    width: 250px;
     height: 450px;
     margin:  0 30px 0;
     justify-content: center;
@@ -22,10 +39,11 @@ h1 {
     flex-direction: column;
 }
 
-.player1, .player2, .display {
-    width: 100%;
+.player1, .player2 {
+    width: 250px;
     height: 110px;
-    border: 1px solid black;
+    border: 3px solid black;
+    font-size: 15px;
     margin: 0 0 15px 0;
     display: flex;
     justify-content: center;
@@ -35,15 +53,33 @@ h1 {
 }
 
 .player1 {
-    background-color: #207DFF;
+    background-color: #DEEBF7;
 }
 
 .player2 {
-    background-color: #00BD56;
+    background-color: #E1EFD9;
 }
 
-.display {
-    background-color: #F9FD50;
+.btns {
+    width: 100%;
+    height: 50px;
+    font-size: 15px;
+    margin: 0 0 15px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 7px;
+}
+
+button {
+    font-family: inherit;
+}
+
+#resetBtn, .changeNameBtn {
+    border: solid 1px grey;
+    background-color: white;
+    font-size: 1rem;
 }
 
 /* Game Board */
@@ -55,20 +91,44 @@ h1 {
 }
 
 .cell {
-    font-size: 80px;
+    font-family: 'Fredoka One', cursive;
+    -webkit-text-stroke: 3px black;
+    color: white;
+    font-size: 7rem;
     text-align: center;
-    border: 1px solid black;
+    border: none;
     width: 150px;
     height: 150px;
     background-color: #fff;
     flex: 1 1 33%;
 }
 
+button:nth-child(5) {
+    border: solid 3px black;
+}
+
+button:nth-child(4), button:nth-child(6) {
+    border-top: solid 3px black;
+    border-bottom: solid 3px black;
+}
+
+button:nth-child(2), button:nth-child(8) {
+    border-left: solid 3px black;
+    border-right: solid 3px black;
+}
+
 /* Responsive for Smaller Screens */
 @media (max-width: 700px) {
+
     h1 {
+        width: 80%;
         padding: 10px 0;
         margin: 0px;
+    }
+
+    .bodyContainer {
+        width: 80%;
+        height: auto;
     }
     
     .playersContainer {
@@ -78,8 +138,10 @@ h1 {
     }
     
     .player1, .player2, .display {
+        text-align: center;
         width: 100%;
         height: 60px;
+        padding: 7px;
     }
 
     .display {
@@ -87,13 +149,14 @@ h1 {
     }
 
     .boardContainer {
-        width: 270px;
-        height: 270px;
+        width: 75%;
+        height: 75%;
     }
 
     .cell {
-        width: 90px;
-        height: 90px;
+        font-size: 4rem;
+        width: 75px;
+        height: 75px;
+        padding: 0;
     }
-
 }
