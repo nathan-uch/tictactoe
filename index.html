@@ -20,18 +20,26 @@
     <div class="bodyContainer">
 
         <div class="playersContainer">
-            <div class="player1"> 
-                <div class="player1Name">Player 1</div>
-                <div class="player1Turn">It is player 1's turn.</div>
+            <div class="display"></div>
+
+            <div class="playerInfo">
+                <div class="player1"> 
+                    <p class="player1Name">Player 1</p>
+                </div>
+                <i class="arrowLeft1"></i>
             </div>
-            <div class="player2">
-                <div class="player2Name">Player 2</div>
-                <div class="player2Turn">It is NOT player 2's turn.</div>
+
+            <div class="playerInfo">
+                <div class="player2">
+                    <p class="player2Name">Player 2</p>
+                </div>
+                <i class="arrowLeft2"></i>
             </div>
+
             <div class="btns">
                 <div class="message"></div>
-                <button type="button" id="resetBtn">Reset</button>
                 <button type="button" class="changeNameBtn">Change Names</button>
+                <button type="button" id="restartBtn">Restart</button>
             </div>
         </div>
 
@@ -46,6 +54,15 @@
                 <button type="button" class="cell" id="7"></button>
                 <button type="button" class="cell" id="8"></button>
         </div>
+
+        <form class="namesForm">      
+            <div class="formOutline">      
+                <input class="p1FormName" type="text" placeholder="Player 1 Name">
+                <input class="p2FormName" type="text" placeholder="Player 2 Name">
+                <button type="button" class="start">Start</button>
+                <button type="button" class="closeForm">Close</button>
+            </div>
+        </form>
 
     </div>
 

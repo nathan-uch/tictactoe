@@ -25,31 +25,46 @@ h1 {
     align-items: center;
     flex-wrap: wrap;
     gap: 50px;
-    padding-top: 40px;
 }
 
-/* Player Info and Buttons*/
+/* Player Info */
 .playersContainer {
     display: flex;
-    width: 250px;
-    height: 450px;
+    width: 300px;
+    height: 300px;
     margin:  0 30px 0;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    gap: 15px;
 }
 
-.player1, .player2 {
-    width: 250px;
-    height: 110px;
-    border: 3px solid black;
-    font-size: 15px;
-    margin: 0 0 15px 0;
+.playerInfo {
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
+    width: 250px;
+    gap: 20px;
+}
+
+.display {
+    text-align: center;
+    width: 200px;
+    height: 40px;
+    margin: 0 0 15px 0;
+}
+
+.player1, .player2 {
+    width: 140px;
+    height: 50px;
+    border: 3px solid black;
+    font-size: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
     gap: 7px;
+    margin: 0 0 0 40px;
 }
 
 .player1 {
@@ -60,9 +75,25 @@ h1 {
     background-color: #E1EFD9;
 }
 
+.arrowLeft1, .arrowLeft2 {
+    height: 10px;
+    width: 10px;
+    border: solid black;
+    border-width: 0 5px 5px 0;
+    padding: 3px;
+    transform: rotate(135deg);
+    -webkit-transform: rotate(135deg);
+}
+
+.arrowLeft2 {
+    visibility: hidden;
+}
+
+/* Buttons */
+
 .btns {
     width: 100%;
-    height: 50px;
+    height: 100px;
     font-size: 15px;
     margin: 0 0 15px 0;
     display: flex;
@@ -76,10 +107,49 @@ button {
     font-family: inherit;
 }
 
-#resetBtn, .changeNameBtn {
-    border: solid 1px grey;
+#restartBtn, .changeNameBtn {
+    border: solid 2px black;
     background-color: white;
     font-size: 1rem;
+    margin: 10px 0 0 0;
+}
+
+/* change player name form */
+.namesForm {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    justify-content: center;
+    align-items: center;
+}
+
+.formOutline {
+    border: solid 3px black;
+    background: white;
+    height: 40%;
+    width: 40%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.p1FormName, .p2FormName {
+    font-family: inherit;
+    font-size: 1.5rem;
+    text-align: center;
+    height: 35px;
+    width: 60%;
+    margin: 15px;
+}
+
+.start, .closeForm {
+    font-size: 1.3rem;
+    margin: 15px 0 0 0;
+    border: solid 2px black;
 }
 
 /* Game Board */
@@ -90,10 +160,9 @@ button {
     height: 450px;
 }
 
-.cell {
+.cell, .xCell, .oCell, .redCell {
     font-family: 'Fredoka One', cursive;
     -webkit-text-stroke: 3px black;
-    color: white;
     font-size: 7rem;
     text-align: center;
     border: none;
@@ -103,18 +172,31 @@ button {
     flex: 1 1 33%;
 }
 
-button:nth-child(5) {
-    border: solid 3px black;
+.xCell {
+    color: #BDD7EE;
 }
 
-button:nth-child(4), button:nth-child(6) {
-    border-top: solid 3px black;
-    border-bottom: solid 3px black;
+.oCell {
+    color: #C5E0B4;
 }
 
-button:nth-child(2), button:nth-child(8) {
-    border-left: solid 3px black;
-    border-right: solid 3px black;
+.redCell {
+    color: #e28787;
+}
+
+/* hashtag board styling */
+div.boardContainer button:nth-child(5) {
+    border: solid 4px black;
+}
+
+div.boardContainer button:nth-child(4), div.boardContainer button:nth-child(6) {
+    border-top: solid 4px black;
+    border-bottom: solid 4px black;
+}
+
+div.boardContainer button:nth-child(2), div.boardContainer button:nth-child(8) {
+    border-left: solid 4px black;
+    border-right: solid 4px black;
 }
 
 /* Responsive for Smaller Screens */
@@ -124,11 +206,13 @@ button:nth-child(2), button:nth-child(8) {
         width: 80%;
         padding: 10px 0;
         margin: 0px;
+        font-size: 4rem;
     }
 
     .bodyContainer {
         width: 80%;
         height: auto;
+        padding: 10px;
     }
     
     .playersContainer {
@@ -153,7 +237,7 @@ button:nth-child(2), button:nth-child(8) {
         height: 75%;
     }
 
-    .cell {
+    .cell, .xCell, .oCell {
         font-size: 4rem;
         width: 75px;
         height: 75px;

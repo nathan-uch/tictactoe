@@ -21,8 +21,8 @@ const CreatePlayer = (name, mark, count) => {
     };
 };
 
-let player1 = CreatePlayer("Peter", "X", 0);
-let player2 = CreatePlayer("Esther", "O", 0);
+let player1 = CreatePlayer("Player 1", "X", 0);
+let player2 = CreatePlayer("Player 2", "O", 0);
 
 //Game Board Module 
 const GameBoard = (function() {
@@ -30,8 +30,9 @@ const GameBoard = (function() {
 
     let array = ["", "", "", "", "", "", "", "", ""];
     let cell = document.querySelectorAll(".cell");
-    let player1Turn = document.querySelector('.player1Turn');
-    let player2Turn = document.querySelector('.player2Turn');
+    let display = document.querySelector('.display');
+    let arrowLeft1 = document.querySelector('.arrowLeft1');
+    let arrowLeft2 = document.querySelector('.arrowLeft2');
 
     const getArray = () => {
         return array;
@@ -50,9 +51,11 @@ const GameBoard = (function() {
                 if ( cell[c].id == i ) { 
                     cell[c].textContent = array[i];
                     if (cell[c].textContent == "X") {
-                        cell[c].style.color = "#BDD7EE";
+                        cell[c].className = 'xCell';
+                        checkForWinner();
                     } else if (cell[c].textContent == "O"){
-                        cell[c].style.color = "#C5E0B4";
+                        cell[c].className = 'oCell';
+                        checkForWinner();
                     }
                 };
             };
@@ -66,7 +69,7 @@ const GameBoard = (function() {
                     return 'xWins'; 
                 } else if (array[index1] == "O" && array[index2] == "O" && array[index3] == "O") {
                     return 'oWins';
-                }
+                };
             };
         };
     };
@@ -76,36 +79,52 @@ const GameBoard = (function() {
         if (player1.getCount() >= 3) {
             if (check3InArray(0, 1, 2) == 'xWins') {
                 GameControl.p1Win();
+                GameControl.showWinMarks(0, 1, 2);
             } else if (check3InArray(0, 3, 6) == 'xWins') {
                 GameControl.p1Win();
+                GameControl.showWinMarks(0, 3, 6);
             } else if (check3InArray(0, 4, 8) == 'xWins') {
                 GameControl.p1Win();
+                GameControl.showWinMarks(0, 4, 8);
             } else if (check3InArray(2, 5, 8) == 'xWins') {
                 GameControl.p1Win();
+                GameControl.showWinMarks(2, 5, 8);
             } else if (check3InArray(6, 7, 8) == 'xWins') {
                 GameControl.p1Win();
+                GameControl.showWinMarks(6, 7, 8);
             } else if (check3InArray(3, 4, 5) == 'xWins') {
                 GameControl.p1Win();
+                GameControl.showWinMarks(3, 4, 5);
             } else if (check3InArray(2, 4, 6) == 'xWins') {
                 GameControl.p1Win();
+                GameControl.showWinMarks(2, 4, 6);
             } else if (check3InArray(1, 4, 7) == 'xWins') {
                 GameControl.p1Win();
+                GameControl.showWinMarks(1, 4, 7);
             } else if (check3InArray(0, 1, 2) == 'oWins') {
                 GameControl.p2Win();
+                GameControl.showWinMarks(0, 1, 2);
             } else if (check3InArray(0, 3, 6) == 'oWins') {
                 GameControl.p2Win();
+                GameControl.showWinMarks(0, 3, 6);
             } else if (check3InArray(0, 4, 8) == 'oWins') {
                 GameControl.p2Win();
+                GameControl.showWinMarks(0, 4, 8);
             } else if (check3InArray(2, 5, 8) == 'oWins') {
                 GameControl.p2Win();
+                GameControl.showWinMarks(2, 5, 8);
             } else if (check3InArray(6, 7, 8) == 'oWins') {
                 GameControl.p2Win();
+                GameControl.showWinMarks(6, 7, 8);
             } else if (check3InArray(3, 4, 5) == 'oWins') {
                 GameControl.p2Win();
+                GameControl.showWinMarks(3, 4, 5);
             } else if (check3InArray(2, 4, 6) == 'oWins') {
                 GameControl.p2Win();
+                GameControl.showWinMarks(2, 4, 6);
             } else if (check3InArray(1, 4, 7) == 'oWins') {
                 GameControl.p2Win();
+                GameControl.showWinMarks(1, 4, 7);
             } else if (player1.getCount() == 5) {
                 GameControl.announceTie();
             };
@@ -114,22 +133,23 @@ const GameBoard = (function() {
 
     const displayTurn = () => {
         if (player1.getCount() == 0 || player1.getCount() == player2.getCount()) {
-            player1Turn.textContent = "It is " + player1.getName() + "'s turn.";
-            player2Turn.textContent = "Please wait for " + player1.getName() + "'s turn.";
+            display.textContent = "It is " + player1.getName() + "'s turn.";
+            arrowLeft1.style.visibility = "visible";
+            arrowLeft2.style.visibility = "hidden";
         } else if (player2.getCount() < player1.getCount()) {
-            player2Turn.textContent = "It is " + player2.getName() + "'s turn.";
-            player1Turn.textContent = "Please wait for " + player2.getName() + "'s turn.";
+            display.textContent = "It is " + player2.getName() + "'s turn.";
+            arrowLeft2.style.visibility = "visible";
+            arrowLeft1.style.visibility = "hidden";
         };
     };
 
     const resetGame = () => {
         array = ["", "", "", "", "", "", "", "", ""];
-        player1 = CreatePlayer("Paul", "X", 0)
-        player2 = CreatePlayer("Tina", "O", 0)
         renderContents();
+        GameControl.openForm();
     };
 
-    let resetBtn = document.querySelector('#resetBtn')
+    let resetBtn = document.querySelector('#restartBtn')
     resetBtn.addEventListener("click", () => {
         resetGame();
         GameControl.displayPlayerNames();
@@ -152,51 +172,86 @@ const GameControl = (function() {
 
     let player1Name = document.querySelector(".player1Name");
     let player2Name = document.querySelector(".player2Name");
-    let player1Turn = document.querySelector('.player1Turn');
-    let player2Turn = document.querySelector('.player2Turn');
-
+    let display = document.querySelector('.display');
+    let cell = document.querySelectorAll(".cell");
+    let arrowLeft1 = document.querySelector('.arrowLeft1');
+    let arrowLeft2 = document.querySelector('.arrowLeft2');
+    let namesBtn = document.querySelector('.changeNameBtn');
+    let namesForm = document.querySelector('.namesForm');
+    let closeFormBtn = document.querySelector('.closeForm');
+    
     const displayPlayerNames = () => {
-        player1Name.textContent = "Player 1: " + player1.getName();
-        player2Name.textContent = "Player 2: " + player2.getName();
-        player1Turn.textContent = "It is " + player1.getName() + "'s turn.";
-        player2Turn.textContent = "It is NOT " + player2.getName() + "'s turn.";
-    }
+        player1Name.textContent = player1.getName();
+        player2Name.textContent = player2.getName();
+        display.textContent = "Click the board to begin"
+    };
 
     const checkTurn = (btnIndex) => {
         if ( player1.getCount() == 0 || player1.getCount() == player2.getCount() ) {
             GameBoard.addMarkToArray(btnIndex, player1);
+            GameBoard.displayTurn();
+            GameBoard.renderContents();
         } else if ( player1.getCount() > player2.getCount() ) {
             GameBoard.addMarkToArray(btnIndex, player2);
+            GameBoard.displayTurn();
+            GameBoard.renderContents();
         };
     };
 
     const p1Win = () => {
-        player1Turn.textContent = "Congratulations " + player1.getName() + "! You won!";
-        player2Turn.textContent = "You lost. Good try.";
-
+        display.textContent = "Congratulations " + player1.getName() + "! You won!";
+        arrowLeft2.style.visibility = "hidden";
     };
 
     const p2Win = () => {
-        player1Turn.textContent = "You lost. Good try.";
-        player2Turn.textContent = "Congratulations " + player2.getName() + "! You won!";
-    }
+        display.textContent = "Congratulations " + player2.getName() + "! You won!";
+        arrowLeft1.style.visibility = "hidden";
+    };
 
     const announceTie = () => {
-        player1Turn.textContent = "It's a tie! So close!";
-        player2Turn.textContent = "It's a tie! So close!";
+        display.textContent = "It's a tie! So close!";
+        arrowLeft1.style.visibility = "hidden";
+        arrowLeft2.style.visibility = "hidden";
+    };
+
+    const showWinMarks = (id1, id2, id3) => {
+        for (let q = 0; q < cell.length; q++) {
+            if (cell[q].id == id1) {
+                cell[q].className = "redCell";
+                continue;
+            } else if (cell[q].id == id2) {
+                cell[q].className = "redCell";
+                continue;
+            } else if (cell[q].id == id3) {
+                cell[q].className = "redCell";
+                break;
+            };
+        };
+    };
+
+    const openForm = () => {
+        namesForm.style.display = "flex";
+    };
+
+    const closeForm = () => {
+        namesForm.style.display = "none";
     }
 
-
     //Event Listener for clicking on the board
-    let cell = document.querySelectorAll(".cell");
     cell.forEach((button) => {
         button.addEventListener("click", () => {
             let btnIndex = button.id;
             checkTurn(btnIndex);
-            GameBoard.displayTurn();
-            GameBoard.renderContents();
-            GameBoard.checkForWinner();
         });
+    });
+
+    //Event Listener for changing names form
+    namesBtn.addEventListener("click", () => {
+        openForm();
+    });
+
+    closeFormBtn.addEventListener("click", () => {
+        closeForm();
     });
 
     return {
@@ -204,6 +259,9 @@ const GameControl = (function() {
         p1Win,
         p2Win,
         announceTie,
+        showWinMarks,
+        openForm,
+        closeForm
     }
 })();
 
