@@ -4,6 +4,7 @@ const CreatePlayer = (name, mark, count) => {
     this.mark = mark;
     this.count = count;
 
+
     const updateTurnCount = () => {
         count = 0;
         for ( let a = 0; a < GameBoard.getArray().length; a++ ) {
@@ -13,11 +14,22 @@ const CreatePlayer = (name, mark, count) => {
         };
     };
 
+    const resetCount = () => {
+        count = 0;
+    };
+
+    const changeName = (newName) => {
+        name = newName;
+    };
+
+    
     return {
         getName: function() { return name },
         getMark: function() { return mark },
         getCount: function() { return count },
-        updateTurnCount
+        updateTurnCount,
+        changeName,
+        resetCount
     };
 };
 
@@ -29,6 +41,7 @@ const GameBoard = (function() {
     "use strict";
 
     let array = ["", "", "", "", "", "", "", "", ""];
+    
     let cell = document.querySelectorAll(".cell");
     let display = document.querySelector('.display');
     let arrowLeft1 = document.querySelector('.arrowLeft1');
@@ -147,12 +160,16 @@ const GameBoard = (function() {
         array = ["", "", "", "", "", "", "", "", ""];
         renderContents();
         GameControl.openForm();
+        console.log(player1.getCount());
+        console.log(player2.getCount());
     };
 
     let resetBtn = document.querySelector('#restartBtn')
     resetBtn.addEventListener("click", () => {
         resetGame();
         GameControl.displayPlayerNames();
+        player1.resetCount();
+        player2.resetCount();
     });
 
     return { 
@@ -161,7 +178,8 @@ const GameBoard = (function() {
         checkForWinner,
         renderContents,
         addMarkToArray,
-        displayTurn
+        displayTurn,
+        resetGame
     };
 
 })();
@@ -170,8 +188,6 @@ const GameBoard = (function() {
 const GameControl = (function() {
     "use strict";
 
-    let player1Name = document.querySelector(".player1Name");
-    let player2Name = document.querySelector(".player2Name");
     let display = document.querySelector('.display');
     let cell = document.querySelectorAll(".cell");
     let arrowLeft1 = document.querySelector('.arrowLeft1');
@@ -179,7 +195,10 @@ const GameControl = (function() {
     let namesBtn = document.querySelector('.changeNameBtn');
     let namesForm = document.querySelector('.namesForm');
     let closeFormBtn = document.querySelector('.closeForm');
-    
+    let player1Name = document.querySelector('.player1');
+    let player2Name = document.querySelector('.player2');
+    let startGame = document.querySelector('.start');
+
     const displayPlayerNames = () => {
         player1Name.textContent = player1.getName();
         player2Name.textContent = player2.getName();
@@ -235,7 +254,7 @@ const GameControl = (function() {
 
     const closeForm = () => {
         namesForm.style.display = "none";
-    }
+    };
 
     //Event Listener for clicking on the board
     cell.forEach((button) => {
@@ -250,10 +269,21 @@ const GameControl = (function() {
         openForm();
     });
 
-    closeFormBtn.addEventListener("click", () => {
+    startGame.addEventListener("click", () => {
+        let p1NewName = document.getElementById('p1InputName').value;
+        let p2NewName = document.getElementById('p2InputName').value;
+        player1.changeName(p1NewName);
+        player2.changeName(p2NewName);
+        player1Name.textContent = p1NewName;
+        player2Name.textContent = p2NewName;
+        document.getElementById('restartBtn').click();
         closeForm();
     });
 
+    closeFormBtn.addEventListener("click", () => {
+        closeForm();
+    });
+    
     return {
         displayPlayerNames,
         p1Win,

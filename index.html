@@ -15,24 +15,38 @@
     <link rel="icon" href="favicon.ico">
 </head>
 <body>
+    <form class="namesForm">      
+        <div class="formOutline">      
+            <input class="p1FormName" type="text" id="p1InputName" placeholder="Player 1 Name">
+            <input class="p2FormName" type="text" id="p2InputName" placeholder="Player 2 Name">
+            <button type="button" class="start">Start</button>
+            <button type="button" class="closeForm">Close</button>
+        </div>
+    </form>    
+
     <h1><span class="tic">Tic</span><span class="tac"> Tac </span><span class="toe">Toe</span></h1>
     
+    <form class="namesForm">      
+        <div class="formOutline">      
+            <input class="p1FormName" type="text" placeholder="Player 1 Name">
+            <input class="p2FormName" type="text" placeholder="Player 2 Name">
+            <button type="button" class="start">Start</button>
+            <button type="button" class="closeForm">Close</button>
+        </div>
+    </form>    
+
     <div class="bodyContainer">
 
         <div class="playersContainer">
             <div class="display"></div>
 
             <div class="playerInfo">
-                <div class="player1"> 
-                    <p class="player1Name">Player 1</p>
-                </div>
+                <div class="player1">Player 1</div>
                 <i class="arrowLeft1"></i>
             </div>
 
             <div class="playerInfo">
-                <div class="player2">
-                    <p class="player2Name">Player 2</p>
-                </div>
+                <div class="player2">Player 2</div>
                 <i class="arrowLeft2"></i>
             </div>
 
@@ -55,17 +69,7 @@
                 <button type="button" class="cell" id="8"></button>
         </div>
 
-        <form class="namesForm">      
-            <div class="formOutline">      
-                <input class="p1FormName" type="text" placeholder="Player 1 Name">
-                <input class="p2FormName" type="text" placeholder="Player 2 Name">
-                <button type="button" class="start">Start</button>
-                <button type="button" class="closeForm">Close</button>
-            </div>
-        </form>
-
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
