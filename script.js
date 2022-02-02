@@ -291,7 +291,9 @@ const GameControl = (function() {
         player2.changeName(p2NewName);
         player1Name.textContent = p1NewName;
         player2Name.textContent = p2NewName;
-        document.getElementById('restartBtn').click();
+        GameBoard.resetGame();
+        player1.resetCount();
+        player2.resetCount();
         closeForm();
     });
 
