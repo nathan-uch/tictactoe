@@ -22,7 +22,6 @@ const CreatePlayer = (name, mark, count) => {
         name = newName;
     };
 
-    
     return {
         getName: function() { return name },
         getMark: function() { return mark },
@@ -159,9 +158,10 @@ const GameBoard = (function() {
     const resetGame = () => {
         array = ["", "", "", "", "", "", "", "", ""];
         renderContents();
-        GameControl.openForm();
         console.log(player1.getCount());
         console.log(player2.getCount());
+        arrowLeft1.style.visibility = "visible";
+        arrowLeft2.style.visibility = "hidden";
     };
 
     let resetBtn = document.querySelector('#restartBtn')
@@ -192,12 +192,17 @@ const GameControl = (function() {
     let cell = document.querySelectorAll(".cell");
     let arrowLeft1 = document.querySelector('.arrowLeft1');
     let arrowLeft2 = document.querySelector('.arrowLeft2');
-    let namesBtn = document.querySelector('.changeNameBtn');
+    let namesBtn = document.querySelector('.renameBtn');
     let namesForm = document.querySelector('.namesForm');
     let closeFormBtn = document.querySelector('.closeForm');
     let player1Name = document.querySelector('.player1');
     let player2Name = document.querySelector('.player2');
     let startGame = document.querySelector('.start');
+    let endGame = false;
+
+    const gameHasEnded = () => {
+        endGame = true;
+    };
 
     const displayPlayerNames = () => {
         player1Name.textContent = player1.getName();
@@ -205,32 +210,41 @@ const GameControl = (function() {
         display.textContent = "Click the board to begin"
     };
 
-    const checkTurn = (btnIndex) => {
-        if ( player1.getCount() == 0 || player1.getCount() == player2.getCount() ) {
-            GameBoard.addMarkToArray(btnIndex, player1);
-            GameBoard.displayTurn();
-            GameBoard.renderContents();
-        } else if ( player1.getCount() > player2.getCount() ) {
-            GameBoard.addMarkToArray(btnIndex, player2);
-            GameBoard.displayTurn();
-            GameBoard.renderContents();
+    const checkTurn = (endGame, btnIndex) => {
+        if (endGame == false) {
+            if ( player1.getCount() == 0 || player1.getCount() == player2.getCount() ) {
+                GameBoard.addMarkToArray(btnIndex, player1);
+                GameBoard.displayTurn();
+                GameBoard.renderContents();
+            } else if ( player1.getCount() > player2.getCount() ) {
+                GameBoard.addMarkToArray(btnIndex, player2);
+                GameBoard.displayTurn();
+                GameBoard.renderContents();
+            };
+        } else if (endGame == true) {
+            for (let u = 0; u < cell.length; u++) {
+                cell[u].id = undefined;
+            };
         };
     };
 
     const p1Win = () => {
         display.textContent = "Congratulations " + player1.getName() + "! You won!";
         arrowLeft2.style.visibility = "hidden";
+        gameHasEnded();
     };
 
     const p2Win = () => {
         display.textContent = "Congratulations " + player2.getName() + "! You won!";
         arrowLeft1.style.visibility = "hidden";
+        gameHasEnded();
     };
 
     const announceTie = () => {
         display.textContent = "It's a tie! So close!";
         arrowLeft1.style.visibility = "hidden";
         arrowLeft2.style.visibility = "hidden";
+        gameHasEnded();
     };
 
     const showWinMarks = (id1, id2, id3) => {
@@ -257,10 +271,11 @@ const GameControl = (function() {
     };
 
     //Event Listener for clicking on the board
+   
     cell.forEach((button) => {
         button.addEventListener("click", () => {
             let btnIndex = button.id;
-            checkTurn(btnIndex);
+            checkTurn(endGame, btnIndex);
         });
     });
 
