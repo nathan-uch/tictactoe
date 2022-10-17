@@ -6,8 +6,8 @@ An HTML, CSS, and JavaScript tic tac toe game.
 * HTML
 * CSS
 * JavaScript
-⋅⋅* Factory functions & methods  
-⋅⋅* Module Pattern
+  * Factory functions & methods  
+  * Module Pattern
 
 ## Live Demo:
 [Try the game live](https://nathan-uch.github.io/tictactoe/)
